@@ -10,7 +10,10 @@ A video converter app created via electron
     - electron app (`mainWindow.webContents.send`) -> mainWindow (`ipcRenderer.on`)
 
 ## Logic workflow
-1. 
+1. User selects videos for conversion
+3. Ask electron app to discover vid length (ipc)
+4. Electron app uses FFMPEG to get video
+5. Electron communicates this information back over
 
 ---
 ### Initial Setup
