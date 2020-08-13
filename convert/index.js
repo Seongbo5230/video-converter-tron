@@ -4,7 +4,7 @@ const _ = require("lodash");
 const { reject } = require("lodash");
 const { ResolvePlugin } = require("webpack");
 
-const { app, BrowserWindow, ipcMain } = electron;
+const { app, BrowserWindow, ipcMain, shell } = electron;
 
 let mainWindow;
 
@@ -46,9 +46,16 @@ ipcMain.on("conversion:start", (event, videos) => {
 
     ffmpeg(video.path)
       .output(outputPath)
+      .on("progress", (event) =>
+        mainWindow.webContents.send("conversion:progress", { video, timemark })
+      )
       .on("end", () =>
         mainWindow.webContents.send("conversion:end", { video, outputPath })
       )
       .run();
   });
+});
+
+ipcMain.on("folder:open", (event, outputPath) => {
+  shell.showItemInFolder(outputPath);
 });
